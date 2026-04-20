@@ -1,46 +1,697 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sheldon's page</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yuheng Zhang's Personal Homepage</title>
+  <style>
+    :root {
+    /* ===== Layout ===== */
+    --hero-height: 90vh;
+    --hero-min: 620px;
+    --max-width: 1220px;
+
+    /* ===== Core Colors ===== */
+    --hero-bg-top: transparent;        /* 现在不用颜色，直接用图片 */
+    --hero-bg-bottom: transparent;
+
+    --content-bg: #141a29;             /* 深蓝灰，贴近星空但更实 */
+    --panel: #1c2736;                  /* 卡片，比背景略亮 */
+
+    /* ===== Text Colors ===== */
+    --text: #e6edf5;                   /* 主文字：冷白 */
+    --text-soft: #a9b6c6;              /* 次级文字 */
+    --muted: #7f8ea3;                  /* 弱说明 */
+    --accent: #8ab9ff;                 /* 强调：偏蓝 */
+
+    /* ===== Lines ===== */
+    --line: rgba(255,255,255,0.08);
+    --line-soft: rgba(255,255,255,0.05);
+
+    /* ===== UI ===== */
+    --button-bg: rgba(255,255,255,0.06);
+    --button-bg-strong: rgba(143,179,217,0.18);
+    --tag-bg: rgba(255,255,255,0.06);
+
+    /* ===== Hero overlay（关键）===== */
+    --hero-overlay: rgba(10, 18, 30, 0.55); 
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: Inter, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      color: var(--text);
+      background: var(--content-bg);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .bg-layer {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+
+        background: url("images/Stars1.png") center top / cover no-repeat;
+        }
+
+    /* ===== Fixed Hero ===== */
+    .hero {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--hero-height);
+    min-height: var(--hero-min);
+
+    background:
+        /* linear-gradient(rgba(240, 245, 250, 0.295), rgba(220, 230, 240, 0.259)), */
+        transparent;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    z-index: 1;
+    }
+
+    .hero-inner {
+      width: min(calc(100% - 96px), var(--max-width));
+      height: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero-copy {
+      padding-top: 20px;
+    }
+
+    .hero-label {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 22px;
+    }
+
+    .hero-title {
+      margin: 0;
+      font-size: clamp(3.8rem, 6vw, 6.4rem);
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+      max-width: 7.5ch;
+    }
+
+    .hero-subheading {
+      margin: 24px 0 0;
+      font-size: 1.24rem;
+      line-height: 1.45;
+      color: var(--text-soft);
+      max-width: 34ch;
+    }
+
+    .hero-note {
+      margin: 22px 0 0;
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 50ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    }
+
+    .meta-line {
+    margin: 0;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.02em;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 42px;
+      padding: 0 16px;
+      border: none;
+      background: var(--button-bg);
+      font-size: 0.92rem;
+      color: var(--text-soft);
+    }
+
+    .btn.primary {
+      background: var(--button-bg-strong);
+      color: var(--text);
+    }
+
+    .hero-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    /*.visual-box {
+      width: min(100%, 470px);
+      aspect-ratio: 1 / 1;
+      background: var(--hero-bg-top);
+      border: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+    }*/
+
+    /*.grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 44px 44px;
+      opacity: 0.45;
+    }
+
+    .shape {
+      position: absolute;
+      border: 1px solid var(--line);
+    }
+
+    .shape.a {
+      left: 10%;
+      top: 12%;
+      width: 42%;
+      height: 26%;
+      background: var(--hero-shape-a);
+    }
+
+    .shape.b {
+      right: 14%;
+      top: 18%;
+      width: 28%;
+      height: 54%;
+      background: var(--hero-shape-b);
+    }
+
+    .shape.c {
+      left: 18%;
+      bottom: 12%;
+      width: 56%;
+      height: 18%;
+      background: var(--hero-shape-c);
+    }
+
+    .line {
+      position: absolute;
+      background: var(--hero-grid-line);
+    }
+
+    .line.h {
+      left: 18%;
+      top: 46%;
+      width: 54%;
+      height: 2px;
+    }
+
+    .line.v {
+      left: 58%;
+      top: 28%;
+      width: 2px;
+      height: 38%;
+    }*/
+
+    /* 用来撑开页面高度，让固定 Hero 后面有正常滚动空间 */
+    .scroll-space {
+      height: calc(var(--hero-height) - 1px);
+      min-height: calc(var(--hero-min) - 1px);
+    }
+
+    /* ===== Scroll Content Layer ===== */
+    .content {
+      position: relative;
+      z-index: 3;
+      background: var(--content-bg);
+      min-height: 220vh;
+      margin-top: 0;
+      box-shadow: 0 -12px 28px rgba(0, 0, 0, 0.25);
+    }
+
+    .content-inner {
+      width: min(calc(100% - 96px), var(--max-width));
+      margin: 0 auto;
+      padding: 34px 0 72px;
+    }
+
+    .section {
+      padding: 42px 0 30px;
+      /* border-top: 1px solid var(--line-soft); */
+    }
+
+    .section:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 24px;
+      margin-bottom: 28px;
+      align-items: start;
+    }
+
+    .kicker {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      padding-top: 6px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 2rem;
+      letter-spacing: -0.04em;
+    }
+
+    .section-desc {
+      margin: 10px 0 0;
+      max-width: 62ch;
+      color: var(--muted);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: none;
+      padding: 22px;
+    }
+
+    .card-index {
+      margin-bottom: 16px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+
+    .card-title {
+      margin: 0 0 10px;
+      font-size: 1.1rem;
+    }
+
+    .card-text {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--text-soft);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 28px;
+      padding: 0 10px;
+      border: none;
+      background: var(--tag-bg);
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+
+    .footer {
+      background: transparent;
+      margin-top: 60px;
+      padding: 48px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    /* ===== Mobile Fallback ===== */
+    @media (max-width: 1100px) {
+      .hero {
+        position: relative;
+        height: auto;
+        min-height: 0;
+      }
+
+      .hero-inner,
+      .section-head,
+      .grid-3,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-inner {
+        width: min(calc(100% - 40px), var(--max-width));
+        padding: 72px 0 40px;
+      }
+
+      .scroll-space {
+        display: none;
+      }
+
+      .content-inner {
+        width: min(calc(100% - 40px), var(--max-width));
+      }
+    }
+
+    /* ===== 入场动画（加在这里）===== */
+    .is-loading .reveal {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: translateY(0);
+        transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+    }
+
+    .r1 { transition-delay: 0.15s; }
+    .r2 { transition-delay: 0.30s; }
+    .r3 { transition-delay: 0.50s; }
+    .r4 { transition-delay: 0.65s; }
+    .r5 { transition-delay: 0.85s; }
+    .r6 { transition-delay: 1.0s; }
+  </style>
 </head>
-<body>
-    <header>
-        <h1>Welcome to my personal webpage!!!</h1>
-        <nav>
-            <ul>
-                <li><a href="#about">About me</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact me</a></li>
-            </ul>
-        </nav>
-    </header>
+<body class="is-loading">
+  <div class="bg-layer"></div>
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="hero-label reveal r1">Yuheng Zhang's Personal Homepage</div>
+        <h1 class="hero-title reveal r2">Engineering under Uncertainty</h1>
+        <p class="hero-subheading reveal r3">Between design and reality, I build systems that endure.</p>
+        <p class="hero-note reveal r4">
+          This work is shaped by a focus on systems operating under real constraints.
+        </p>
+        <div class="hero-actions reveal r5">
+          <a class="btn" href="#identity">Enter</a>
+          <a class="btn" href="#engineering">Projects</a>
+          <a class="btn" href="#thinking">Thinking</a>
+          <a class="btn" href="#expression">Beyond Engineering</a>
+          <a class="btn" href="#background">Background</a>
+        </div>
+        <div class="hero-meta reveal r6">
+            <p class="meta-line">
+                Mechanical Engineering student at NYU Tandon, Class of 2030
+            </p>
 
-    <section id="about">
-        <h2>About me</h2>
-        <p>I am Sheldon Zhang, a student curently studying in Shenzhen College of International Education.</p>
-    </section>
+            <p class="meta-line">
+                Contact: yz13170@nyu.edu
+            </p>
+            </div>
+      </div>
 
-    <section id="projects">
-        <h2>Projects</h2>
-        <ul>
-            <li><a href="#">Project 1</a></li>
-            <li><a href="#">Project 2</a></li>
-            <li><a href="#">Project 3</a></li>
-        </ul>
-    </section>
+      <!-- <div class="hero-visual">
+        <div class="visual-box" aria-hidden="true">
+          <div class="grid"></div>
+          <div class="shape a"></div>
+          <div class="shape b"></div>
+          <div class="shape c"></div>
+          <div class="line h"></div>
+          <div class="line v"></div>
+        </div>
+      </div> -->
+    </div>
+  </section>
 
-    <section id="contact">
-        <h2>Contact me</h2>
-        <p>Via e-mail：<a href="mailto:your-email@example.com">sheldon114514@163.com</a></p>
-    </section>
+  <div class="scroll-space" aria-hidden="true"></div>
 
-    <footer>
-        <p>&copy; 2025 Sheldon Zhang. All rights reserved.</p>
-    </footer>
+  <main class="content">
+    <div class="content-inner">
+      <section class="section" id="identity">
+        <div class="section-head">
+          <div class="kicker">Identity</div>
+          <div>
+            <h2 class="section-title">Who I am</h2>
+            <p class="section-desc">
+              I work on systems that operate under real constraints, with a focus on control, structure, uncertainty, and how ideas hold up outside ideal conditions.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <article class="card">
+            <p class="card-text">
+              My work usually begins with a question about stability. I am interested in how systems behave when theory meets friction, noise, and imperfect environments.
+            </p>
+          </article>
+          <article class="card">
+            <p class="card-text">
+              I approach problems through simulation, iterative design, and system level reasoning, and I also use visual media as another way to observe structure and motion.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="engineering">
+        <div class="section-head">
+          <div class="kicker">Engineering</div>
+          <div>
+            <h2 class="section-title">Selected Projects</h2>
+            <p class="section-desc">
+              A structured overview of engineering work centered on control, prototyping, simulation, and real world behavior.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <div class="card-index">Project 01</div>
+            <h3 class="card-title">Drone Bionic Gripper</h3>
+            <p class="card-text">
+              A perching mechanism for drones designed to land on irregular branches and operate in environments where flat surfaces are unavailable.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Mechanics</span>
+              <span class="tag">Control</span>
+              <span class="tag">Robotics</span>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-index">Project 02</div>
+            <h3 class="card-title">Flight Control Simulation</h3>
+            <p class="card-text">
+              A simulation workflow for testing motion, tuning PID loops, and examining the gap between modeled behavior and physical reality.
+            </p>
+            <div class="tag-row">
+              <span class="tag">C++</span>
+              <span class="tag">PID</span>
+              <span class="tag">Visualization</span>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-index">Project 03</div>
+            <h3 class="card-title">Engineering Teaching Sessions</h3>
+            <p class="card-text">
+              Practical lessons introducing circuits, logic, and systems thinking through projects that make engineering concepts tangible.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Teaching</span>
+              <span class="tag">Circuits</span>
+              <span class="tag">Systems</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="thinking">
+        <div class="section-head">
+          <div class="kicker">Thinking</div>
+          <div>
+            <h2 class="section-title">Notes on Practice</h2>
+            <p class="section-desc">
+              Short principles that frame how I think about engineering, failure, and the relationship between systems and people.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <div class="card-index">Thinking 01</div>
+            <h3 class="card-title">Engineering with Empathy</h3>
+            <p class="card-text">
+              Systems should be designed with awareness of the people, environments, and limitations they will actually encounter.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-index">Thinking 02</div>
+            <h3 class="card-title">Beyond Ideal Conditions</h3>
+            <p class="card-text">
+              A system that only works in clean assumptions is still incomplete. Robustness begins where certainty ends.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-index">Thinking 03</div>
+            <h3 class="card-title">Failure as Signal</h3>
+            <p class="card-text">
+              Simulation and testing matter most when they reveal where a model stops holding, not when they simply confirm success.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="expression">
+        <div class="section-head">
+          <div class="kicker">Beyond Engineering</div>
+          <div>
+            <h2 class="section-title">Visual and Personal Work</h2>
+            <p class="section-desc">
+              Ways of observing the world outside engineering, through image making, visual studies, and character based presentation.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <div class="card-index">Expression 01</div>
+            <h3 class="card-title">Photography</h3>
+            <p class="card-text">
+              A space for selected photographs focused on atmosphere, structure, light, and the physical presence of place.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-index">Expression 02</div>
+            <h3 class="card-title">Visual Art</h3>
+            <p class="card-text">
+              Studies in composition, form, and color that extend my attention to detail into another medium.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-index">Expression 03</div>
+            <h3 class="card-title">Cosplay</h3>
+            <p class="card-text">
+              A curated section for character presentation, costume work, and performative visual identity.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="background">
+        <div class="section-head">
+          <div class="kicker">Background</div>
+          <div>
+            <h2 class="section-title">Education and Achievements</h2>
+            <p class="section-desc">
+              Formal context and selected milestones that support the broader picture of my work.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <div class="card-index">Background 01</div>
+            <h3 class="card-title">Education</h3>
+            <p class="card-text">
+              A place for your academic path, current school, courses, and the technical directions you are building toward.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-index">Background 02</div>
+            <h3 class="card-title">Achievements</h3>
+            <p class="card-text">
+              A concise record of competitions, publications, patents, or distinctions that strengthen the engineering narrative.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-index">Background 03</div>
+            <h3 class="card-title">Academic Direction</h3>
+            <p class="card-text">
+              A short description of the problems, fields, or questions you plan to continue exploring in the future.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="misc">
+        <div class="section-head">
+          <div class="kicker">Other Work</div>
+          <div>
+            <h2 class="section-title">Misc</h2>
+            <p class="section-desc">
+              A flexible area for experiments, notes, side interests, or content that does not belong to the main narrative but still deserves a place.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <article class="card">
+            <p class="card-text">
+              This section can hold writing fragments, side builds, temporary experiments, or anything that you do not want to place in the main narrative sections.
+            </p>
+          </article>
+          <article class="card">
+            <p class="card-text">
+              You can also remove this section entirely if you want the homepage to stay more disciplined and tightly edited.
+            </p>
+          </article>
+        </div>
+      </section>
+      <footer class="footer">
+        &copy; 2026 Yuheng (Sheldon/Caskiryn) Zhang. All rights reserved. 
+        <br> Contact: yz13170@nyu.edu
+      </footer>
+    
+    </div>
+    
+  </main>
+  <script>
+    window.addEventListener('load', () => {
+        document.body.classList.remove('is-loading');
+    });
+    </script>
 </body>
 </html>
-
-
